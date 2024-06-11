@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "react-natve",
-    "slug": "native-ts",
+    "name": "pass",
+    "slug": "pass",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -25,7 +28,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "46060e42-19e9-4bb0-a193-e2bbc8ee3739"
+        "projectId": "a0cac376-7c1c-4af7-a454-3d4ecc4fb355"
       }
     },
     "owner": "radekrozmus"
