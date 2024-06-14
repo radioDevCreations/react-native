@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, ScrollView } from "react-native";
 import DataLoader from "../DataLoader";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-
-interface User {
-	id: number;
-	name: string;
-	email: string;
-}
+import User from "entities/User";
 
 const ContactsList: React.FC = () => {
 	const navigation = useNavigation<NavigationProp<any>>();
@@ -62,6 +57,8 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 		padding: 10,
 		backgroundColor: "#f0f0f0",
+		borderColor: "orange",
+		borderWidth: 1,
 	},
 	userName: {
 		fontWeight: "bold",

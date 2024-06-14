@@ -11,7 +11,10 @@ const PostsScreen: React.FC = () => {
 		<NavigationContainer independent={true}>
 			<Stack.Navigator initialRouteName="Posts">
 				<Stack.Screen name="Posts" component={PostsList} />
-				<Stack.Screen name="PostDetails" component={PostDetailsScreen as any} />
+				<Stack.Screen
+					name="PostDetails"
+					component={PostDetailsScreen as React.FC<any>}
+				/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

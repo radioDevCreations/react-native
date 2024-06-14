@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	ActivityIndicator,
+	Image,
+	FlatList,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	userLoaded,
@@ -8,21 +15,12 @@ import {
 	pictureLoaded,
 } from "../redux/userSlice";
 import DataLoader from "../DataLoader";
+import User from "entities/User";
 
 interface RootState {
 	user: {
-		userData: UserData | null;
+		userData: User | null;
 		loading: boolean;
-	};
-}
-
-interface UserData {
-	name: string;
-	email: string;
-	phone: string;
-	address: {
-		street: string;
-		city: string;
 	};
 }
 
@@ -30,6 +28,7 @@ const ProfileScreen: React.FC = () => {
 	const [userPhoto, setUserPhoto] = useState<string | null>(null);
 	const userData = useSelector((state: RootState) => state.user.userData);
 	const loading = useSelector((state: RootState) => state.user.loading);
+	const [albums, setAlbums] = useState([]);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -49,11 +48,27 @@ const ProfileScreen: React.FC = () => {
 					setUserPhoto(tempData.results[0].picture.large);
 				}
 				dispatch(pictureLoaded());
+				return userData;
 			} catch (error: any) {
 				console.error("Failed to fetch user data:", error);
 				dispatch(userLoadFailed(error.message));
 			}
 		};
+		const fetchAlbumsData = async (id: number) => {
+			const dataLoader = DataLoader.getInstance();
+			try {
+				const data = await dataLoader.fetchData(
+					`https://jsonplaceholder.typicode.com/albums?userId=${id}`
+				);
+				setAlbums(data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		fetchUserData().then((uData: any): void => {
+			fetchAlbumsData(uData?.id);
+		});
 
 		fetchUserData();
 	}, [dispatch, userData, userPhoto]);
@@ -74,6 +89,18 @@ const ProfileScreen: React.FC = () => {
 			<Text
 				style={styles.info}
 			>{`${userData?.address?.street}, ${userData?.address?.city}`}</Text>
+			<View style={styles.container}>
+				<Text style={styles.albumsTitle}>Activities</Text>
+				<FlatList
+					data={albums}
+					keyExtractor={(item: any) => item.id.toString()}
+					renderItem={({ item }) => (
+						<View style={styles.itemContainer}>
+							<Text style={styles.itemText}>{item.title}</Text>
+						</View>
+					)}
+				/>
+			</View>
 		</View>
 	);
 };
@@ -82,7 +109,13 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: "center",
-		justifyContent: "center",
+		paddingTop: 80,
+		backgroundColor: "#f5f5f5",
+	},
+	activityContainer: {
+		flex: 1,
+		alignItems: "center",
+		paddingTop: 50,
 		backgroundColor: "#f5f5f5",
 	},
 	name: {
@@ -100,6 +133,34 @@ const styles = StyleSheet.create({
 		height: 150,
 		borderRadius: 75,
 		marginBottom: 20,
+	},
+	albumsTitle: {
+		fontSize: 20,
+		fontWeight: "bold",
+		marginBottom: 20,
+		paddingLeft: 10,
+		alignSelf: "flex-start",
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	errorContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	errorText: {
+		color: "red",
+	},
+	itemContainer: {
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: "orange",
+	},
+	itemText: {
+		fontSize: 16,
 	},
 });
 

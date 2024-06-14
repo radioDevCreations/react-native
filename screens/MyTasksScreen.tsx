@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+	View,
+	Text,
+	FlatList,
+	StyleSheet,
+	ActivityIndicator,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { tasksLoaded } from "../redux/tasksSlice";
 import DataLoader from "../DataLoader";
-
-interface Task {
-	id: number;
-	title: string;
-	completed: boolean;
-}
+import GUIDGenerator from "GUIDGenerator";
+import Task from "../entities/Task";
 
 interface RootState {
 	tasks: {
@@ -19,28 +21,42 @@ interface RootState {
 const MyTasksScreen: React.FC = () => {
 	const dispatch = useDispatch();
 	const tasks = useSelector((state: RootState) => state.tasks.data);
+	const [page, setPage] = useState(1);
+	const [isLoading, setIsLoading] = useState(false);
+	const [guid, setGUID] = useState("");
+	const tasksPerPage = 20;
 
 	useEffect(() => {
 		const fetchTasks = async () => {
+			setIsLoading(true);
 			try {
 				const loader = DataLoader.getInstance();
 				const todos = await loader.fetchData(
-					"https://jsonplaceholder.typicode.com/todos"
+					`https://jsonplaceholder.typicode.com/todos?_page=${page}&_limit=${tasksPerPage}`
 				);
-				dispatch(tasksLoaded(todos));
+				dispatch(tasksLoaded([...tasks, ...todos]));
 			} catch (error) {
 				console.error("Failed to fetch tasks", error);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchTasks();
-	}, [dispatch]);
+		setGUID(GUIDGenerator.generateGUID());
+	}, [page]);
+
+	const loadMoreTasks = () => {
+		if (!isLoading) {
+			setPage(page + 1);
+		}
+		setGUID(GUIDGenerator.generateGUID());
+	};
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Todo List</Text>
 			<FlatList
 				data={tasks}
-				keyExtractor={(item) => item.id.toString()}
+				keyExtractor={(item) => `${item.id.toString()}${guid}`}
 				renderItem={({ item }) => (
 					<View style={styles.todoItem}>
 						<Text
@@ -52,6 +68,11 @@ const MyTasksScreen: React.FC = () => {
 						</Text>
 					</View>
 				)}
+				onEndReached={loadMoreTasks}
+				onEndReachedThreshold={0.5}
+				ListFooterComponent={
+					isLoading ? <ActivityIndicator size="large" /> : null
+				}
 			/>
 		</View>
 	);
@@ -72,7 +93,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		padding: 10,
 		borderBottomWidth: 1,
-		borderBottomColor: "#ccc",
+		borderBottomColor: "orange",
 	},
 	todoText: {
 		fontSize: 16,

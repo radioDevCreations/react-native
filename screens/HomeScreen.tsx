@@ -22,8 +22,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
 			<View style={styles.buttonContainer}>
 				<Button
-					title="Go to Settings"
-					onPress={() => navigation.navigate("Settings")}
+					title="View Network"
+					onPress={() => navigation.navigate("Contacts")}
 				/>
 				<Button
 					title="View Profile"
@@ -34,20 +34,25 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 			<View style={styles.cardContainer}>
 				<TouchableOpacity
 					style={styles.featureCard}
+					onPress={() => navigation.navigate("Posts")}
+				>
+					<Text style={styles.cardTitle}>Recent Posts</Text>
+					<Text style={styles.cardDetail}>View recent notifications</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.featureCard}
 					onPress={() => navigation.navigate("Profile")}
 				>
 					<Text style={styles.cardTitle}>My Profile</Text>
 					<Text style={styles.cardDetail}>View and edit your profile</Text>
 				</TouchableOpacity>
-
 				<TouchableOpacity
 					style={styles.featureCard}
-					onPress={() => navigation.navigate("Settings")}
+					onPress={() => navigation.navigate("Contacts")}
 				>
-					<Text style={styles.cardTitle}>Settings</Text>
-					<Text style={styles.cardDetail}>Adjust app settings</Text>
+					<Text style={styles.cardTitle}>Contacts</Text>
+					<Text style={styles.cardDetail}>Meet your network!</Text>
 				</TouchableOpacity>
-
 				<TouchableOpacity
 					style={styles.featureCard}
 					onPress={() => navigation.navigate("Tasks")}
@@ -55,13 +60,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 					<Text style={styles.cardTitle}>Tasks</Text>
 					<Text style={styles.cardDetail}>Check your task list</Text>
 				</TouchableOpacity>
-
 				<TouchableOpacity
 					style={styles.featureCard}
-					onPress={() => navigation.navigate("Notifications")}
+					onPress={() => navigation.navigate("Settings")}
 				>
-					<Text style={styles.cardTitle}>Notifications</Text>
-					<Text style={styles.cardDetail}>View recent notifications</Text>
+					<Text style={styles.cardTitle}>Settings</Text>
+					<Text style={styles.cardDetail}>Adjust app settings</Text>
 				</TouchableOpacity>
 			</View>
 		</ScrollView>

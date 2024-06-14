@@ -8,22 +8,12 @@ import {
 } from "react-native";
 import DataLoader from "../DataLoader";
 import { RouteProp } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import Post from "entities/Post";
+import Comment from "entities/Comment";
 
 interface PostDetailsScreenProps {
 	route: RouteProp<{ params: { postId: number } }, "params">;
-}
-
-interface Post {
-	id: number;
-	title: string;
-	body: string;
-}
-
-interface Comment {
-	id: number;
-	name: string;
-	email: string;
-	body: string;
 }
 
 const PostDetailsScreen: React.FC<PostDetailsScreenProps> = ({ route }) => {
@@ -31,6 +21,8 @@ const PostDetailsScreen: React.FC<PostDetailsScreenProps> = ({ route }) => {
 	const [post, setPost] = useState<Post | null>(null);
 	const [comments, setComments] = useState<Comment[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [likes, setLikes] = useState(0);
+	const [shares, setShares] = useState(0);
 
 	useEffect(() => {
 		const fetchDetails = async () => {
@@ -43,6 +35,8 @@ const PostDetailsScreen: React.FC<PostDetailsScreenProps> = ({ route }) => {
 					`https://jsonplaceholder.typicode.com/posts/${postId}/comments`
 				);
 				setPost(postResponse);
+				setLikes(Math.floor(Math.random() * 1000));
+				setShares(Math.floor(Math.random() * 500));
 				setComments(commentsResponse);
 				setLoading(false);
 			} catch (error) {
@@ -62,6 +56,14 @@ const PostDetailsScreen: React.FC<PostDetailsScreenProps> = ({ route }) => {
 			<View style={styles.postContainer}>
 				<Text style={styles.title}>{post?.title}</Text>
 				<Text style={styles.body}>{post?.body}</Text>
+				<View style={styles.iconRow}>
+					<Icon name="thumbs-up" size={20} color="#000" />
+					<Text style={styles.iconText}>{likes}</Text>
+				</View>
+				<View style={styles.iconRow}>
+					<Icon name="share" size={20} color="#000" />
+					<Text style={styles.iconText}>{shares}</Text>
+				</View>
 			</View>
 			<Text style={styles.commentsTitle}>Comments</Text>
 			{comments.map((comment) => (
@@ -104,6 +106,8 @@ const styles = StyleSheet.create({
 		marginVertical: 8,
 		marginHorizontal: 20,
 		borderRadius: 5,
+		borderColor: "orange",
+		borderWidth: 1,
 	},
 	commentName: {
 		fontSize: 16,
@@ -115,6 +119,16 @@ const styles = StyleSheet.create({
 	},
 	commentBody: {
 		fontSize: 14,
+	},
+	iconRow: {
+		flexWrap: "nowrap",
+		width: "100%",
+		flexDirection: "column",
+		alignItems: "flex-end",
+	},
+	iconText: {
+		fontSize: 16,
+		marginLeft: 5,
 	},
 });
 

@@ -44,11 +44,15 @@ function TabNavigator() {
 						iconName = focused ? "person" : "person-outline";
 					} else if (route.name === "Settings") {
 						iconName = focused ? "settings" : "settings-outline";
+					} else if (route.name === "Tasks") {
+						iconName = focused
+							? "checkmark-done-circle"
+							: "checkmark-done-circle-outline";
 					}
 
 					return <Ionicons name={iconName} size={size} color={color} />;
 				},
-				tabBarActiveTintColor: "tomato",
+				tabBarActiveTintColor: "orange",
 				tabBarInactiveTintColor: "gray",
 			})}
 		>

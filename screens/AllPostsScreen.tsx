@@ -7,13 +7,8 @@ import {
 	ListRenderItem,
 } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
-
+import Post from "../entities/Post";
 import DataLoader from "../DataLoader";
-
-interface Post {
-	id: string;
-	title: string;
-}
 
 interface AllPostsScreenProps {
 	navigation: NavigationProp<any>;

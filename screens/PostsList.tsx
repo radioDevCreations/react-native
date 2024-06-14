@@ -9,12 +9,7 @@ import {
 } from "react-native";
 import DataLoader from "../DataLoader";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-
-interface Post {
-	id: number;
-	title: string;
-	body: string;
-}
+import Post from "entities/Post";
 
 const PostsList: React.FC = () => {
 	const navigation = useNavigation<NavigationProp<any>>();
@@ -66,13 +61,15 @@ const PostsList: React.FC = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 50,
+		padding: 10,
 	},
 	postContainer: {
 		backgroundColor: "#f0f0f0",
 		padding: 20,
 		marginVertical: 8,
 		borderRadius: 5,
+		borderColor: "orange",
+		borderWidth: 1,
 	},
 	title: {
 		fontSize: 16,
