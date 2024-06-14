@@ -49,7 +49,7 @@ const AllPostsScreen: React.FC<AllPostsScreenProps> = ({ navigation }) => {
 		<FlatList
 			data={posts}
 			renderItem={renderItem}
-			keyExtractor={(item) => item.id}
+			keyExtractor={(item) => `${item.id}`}
 		/>
 	);
 };
