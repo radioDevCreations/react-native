@@ -1,3 +1,4 @@
+// App.tsx
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -9,10 +10,9 @@ import ProfileScreen from "./screens/ProfileScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import MyTasksScreen from "./screens/MyTasksScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "./redux/store";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useSelector } from "react-redux";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,7 +32,7 @@ function TabNavigator() {
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
 				tabBarIcon: ({ focused, color, size }) => {
-					let iconName;
+					let iconName: string = "";
 
 					if (route.name === "Home") {
 						iconName = focused ? "home" : "home-outline";
@@ -84,8 +84,8 @@ function TabNavigator() {
 	);
 }
 
-const AppNavigator = () => {
-	const userData = useSelector((state) => state.user.userData);
+const AppNavigator: React.FC = () => {
+	const userData = useSelector((state: RootState) => state.user.userData);
 
 	return (
 		<NavigationContainer>
@@ -94,12 +94,12 @@ const AppNavigator = () => {
 	);
 };
 
-function App() {
+const App: React.FC = () => {
 	return (
 		<Provider store={store}>
 			<AppNavigator />
 		</Provider>
 	);
-}
+};
 
 export default App;
