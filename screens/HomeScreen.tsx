@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	Text,
@@ -9,12 +9,22 @@ import {
 	Platform,
 } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "redux/store";
+import { fetchPosts } from "redux/postsSlice";
 
 interface HomeScreenProps {
 	navigation: NavigationProp<any>;
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+	const dispatch = useDispatch<AppDispatch>();
+	const { postsNumber } = useSelector((state: RootState) => state.posts);
+
+	useEffect(() => {
+		dispatch(fetchPosts());
+	}, []);
+
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<Text style={styles.title}>Welcome to MyApp!</Text>
@@ -38,6 +48,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 				>
 					<Text style={styles.cardTitle}>Recent Posts</Text>
 					<Text style={styles.cardDetail}>View recent notifications</Text>
+					{postsNumber > 0 && (
+						<View style={styles.notificationBadge}>
+							<Text style={styles.notificationText}>{postsNumber}</Text>
+						</View>
+					)}
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.featureCard}
@@ -141,6 +156,21 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: "#666",
 		marginTop: 5,
+	},
+	notificationBadge: {
+		position: "absolute",
+		right: 10,
+		top: 10,
+		backgroundColor: "red",
+		borderRadius: 15,
+		width: 30,
+		height: 30,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	notificationText: {
+		color: "white",
+		fontWeight: "bold",
 	},
 });
 

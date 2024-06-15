@@ -24,7 +24,7 @@ const MyTasksScreen: React.FC = () => {
 	const [page, setPage] = useState(1);
 	const [isLoading, setIsLoading] = useState(false);
 	const [guid, setGUID] = useState("");
-	const tasksPerPage = 20;
+	const tasksPerPage = 200;
 
 	useEffect(() => {
 		const fetchTasks = async () => {

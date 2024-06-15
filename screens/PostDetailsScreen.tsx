@@ -11,6 +11,7 @@ import { RouteProp } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Post from "entities/Post";
 import Comment from "entities/Comment";
+import CommentsBoard from "components/CommentsBoard";
 
 interface PostDetailsScreenProps {
 	route: RouteProp<{ params: { postId: number } }, "params">;
@@ -48,7 +49,7 @@ const PostDetailsScreen: React.FC<PostDetailsScreenProps> = ({ route }) => {
 	}, [postId]);
 
 	if (loading) {
-		return <ActivityIndicator size="large" color="#0000ff" />;
+		return <ActivityIndicator size="large" color="orange" />;
 	}
 
 	return (
@@ -65,14 +66,7 @@ const PostDetailsScreen: React.FC<PostDetailsScreenProps> = ({ route }) => {
 					<Text style={styles.iconText}>{shares}</Text>
 				</View>
 			</View>
-			<Text style={styles.commentsTitle}>Comments</Text>
-			{comments.map((comment) => (
-				<View key={comment.id} style={styles.commentContainer}>
-					<Text style={styles.commentName}>{comment.name}</Text>
-					<Text style={styles.commentEmail}>{comment.email}</Text>
-					<Text style={styles.commentBody}>{comment.body}</Text>
-				</View>
-			))}
+			<CommentsBoard comments={comments} />
 		</ScrollView>
 	);
 };
@@ -92,33 +86,6 @@ const styles = StyleSheet.create({
 	},
 	body: {
 		fontSize: 16,
-	},
-	commentsTitle: {
-		fontSize: 18,
-		fontWeight: "bold",
-		marginTop: 20,
-		marginBottom: 10,
-		marginLeft: 20,
-	},
-	commentContainer: {
-		backgroundColor: "#e9ecef",
-		padding: 15,
-		marginVertical: 8,
-		marginHorizontal: 20,
-		borderRadius: 5,
-		borderColor: "orange",
-		borderWidth: 1,
-	},
-	commentName: {
-		fontSize: 16,
-		fontWeight: "bold",
-	},
-	commentEmail: {
-		fontSize: 14,
-		color: "gray",
-	},
-	commentBody: {
-		fontSize: 14,
 	},
 	iconRow: {
 		flexWrap: "nowrap",

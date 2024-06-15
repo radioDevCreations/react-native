@@ -3,9 +3,9 @@ import { TouchableOpacity, Text, StyleSheet, ScrollView } from "react-native";
 import DataLoader from "../DataLoader";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import User from "entities/User";
+import ContactTile from "components/ContactTile";
 
 const ContactsList: React.FC = () => {
-	const navigation = useNavigation<NavigationProp<any>>();
 	const [users, setUsers] = useState<User[]>([]);
 	const [loading, setLoading] = useState(true);
 
@@ -31,18 +31,7 @@ const ContactsList: React.FC = () => {
 			{loading ? (
 				<Text>Loading users...</Text>
 			) : (
-				users.map((user) => (
-					<TouchableOpacity
-						onPress={() =>
-							navigation.navigate("ContactDetails", { userId: user.id })
-						}
-						style={styles.userContainer}
-						key={user.id}
-					>
-						<Text style={styles.userName}>{user.name}</Text>
-						<Text>{user.email}</Text>
-					</TouchableOpacity>
-				))
+				users.map((user) => <ContactTile key={user.id} user={user} />)
 			)}
 		</ScrollView>
 	);
@@ -52,16 +41,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 20,
-	},
-	userContainer: {
-		marginBottom: 15,
-		padding: 10,
-		backgroundColor: "#f0f0f0",
-		borderColor: "orange",
-		borderWidth: 1,
-	},
-	userName: {
-		fontWeight: "bold",
 	},
 });
 

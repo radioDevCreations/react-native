@@ -11,7 +11,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import MyTasksScreen from "./screens/MyTasksScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Provider, useSelector } from "react-redux";
-import { store } from "./redux/store";
+import { RootState, store } from "./redux/store";
 import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();

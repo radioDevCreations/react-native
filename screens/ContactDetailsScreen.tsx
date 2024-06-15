@@ -65,7 +65,7 @@ const ContactDetailsScreen: React.FC<ContactDetailsScreenProps> = ({
 	}, [userId]);
 
 	if (loading) {
-		return <ActivityIndicator size="large" color="#0000ff" />;
+		return <ActivityIndicator size="large" color="orange" />;
 	}
 
 	return (

@@ -7,31 +7,41 @@ import {
 	ActivityIndicator,
 	TouchableOpacity,
 } from "react-native";
-import DataLoader from "../DataLoader";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import Post from "entities/Post";
+import SearchBar from "components/SearchBar";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "redux/store";
+import { fetchPosts } from "redux/postsSlice";
 
 const PostsList: React.FC = () => {
 	const navigation = useNavigation<NavigationProp<any>>();
-	const [posts, setPosts] = useState<Post[]>([]);
-	const [loading, setLoading] = useState(true);
+	const dispatch = useDispatch<AppDispatch>();
+	const { posts, loading, error } = useSelector(
+		(state: RootState) => state.posts
+	);
+	const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
-		const fetchPosts = async () => {
-			try {
-				const loader = DataLoader.getInstance();
-				const postsData = await loader.fetchData(
-					"https://jsonplaceholder.typicode.com/posts"
-				);
-				setPosts(postsData);
-				setLoading(false);
-			} catch (error) {
-				console.error("Failed to fetch posts", error);
-				setLoading(false);
-			}
-		};
-		fetchPosts();
+		dispatch(fetchPosts());
 	}, []);
+
+	useEffect(() => {
+		setFilteredPosts(posts);
+	}, [posts]);
+
+	const handleSearch = (query: string) => {
+		setSearch(query);
+		if (query === "") {
+			setFilteredPosts(posts);
+		} else {
+			const filtered = posts.filter((post) =>
+				post.title.toLowerCase().includes(query.toLowerCase())
+			);
+			setFilteredPosts(filtered);
+		}
+	};
 
 	const renderItem = ({ item }: { item: Post }) => (
 		<TouchableOpacity
@@ -45,15 +55,17 @@ const PostsList: React.FC = () => {
 
 	return (
 		<View style={styles.container}>
+			<SearchBar search={search} onSearch={handleSearch} />
 			{loading ? (
-				<ActivityIndicator size="large" color="#0000ff" />
+				<ActivityIndicator size="large" color="orange" />
 			) : (
 				<FlatList
-					data={posts}
+					data={filteredPosts}
 					renderItem={renderItem}
-					keyExtractor={(item) => item.id.toString()}
+					keyExtractor={(item) => `${item.id}`}
 				/>
 			)}
+			{error && <Text style={styles.errorText}>{error}</Text>}
 		</View>
 	);
 };
@@ -62,6 +74,14 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 10,
+	},
+	searchBar: {
+		height: 40,
+		borderColor: "gray",
+		borderWidth: 1,
+		paddingHorizontal: 8,
+		margin: 16,
+		borderRadius: 8,
 	},
 	postContainer: {
 		backgroundColor: "#f0f0f0",
@@ -77,6 +97,11 @@ const styles = StyleSheet.create({
 	},
 	body: {
 		fontSize: 14,
+	},
+	errorText: {
+		color: "red",
+		textAlign: "center",
+		marginTop: 20,
 	},
 });
 
