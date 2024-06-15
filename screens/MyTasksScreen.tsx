@@ -13,6 +13,7 @@ import DataLoader from "../DataLoader";
 import GUIDGenerator from "GUIDGenerator";
 import Task from "../entities/Task";
 import { AppDispatch } from "redux/store";
+import TaskItem from "components/TaskItem";
 
 interface RootState {
 	tasks: {
@@ -64,27 +65,7 @@ const MyTasksScreen: React.FC = () => {
 			<FlatList
 				data={tasks}
 				keyExtractor={(item) => `${item.id.toString()}${guid}`}
-				renderItem={({ item }) => (
-					<View style={styles.todoItem}>
-						<TouchableOpacity
-							onPress={() => handleToggleCompletion(item.id)}
-							style={styles.checkbox}
-						>
-							{item.completed ? (
-								<Text style={styles.checkboxChecked}>✓</Text>
-							) : (
-								<Text style={styles.checkboxUnchecked}></Text>
-							)}
-						</TouchableOpacity>
-						<Text
-							style={
-								item.completed ? styles.todoTextCompleted : styles.todoText
-							}
-						>
-							{item.title}
-						</Text>
-					</View>
-				)}
+				renderItem={({ item }) => <TaskItem task={item} />}
 				onEndReached={loadMoreTasks}
 				onEndReachedThreshold={0.5}
 				ListFooterComponent={
@@ -100,43 +81,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 16,
 		backgroundColor: "#f5f5f5",
-	},
-	title: {
-		fontSize: 24,
-		marginBottom: 20,
-	},
-	todoItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 10,
-		borderBottomWidth: 1,
-		borderBottomColor: "orange",
-	},
-	todoText: {
-		fontSize: 16,
-	},
-	todoTextCompleted: {
-		fontSize: 16,
-		textDecorationLine: "line-through",
-		color: "gray",
-	},
-	checkbox: {
-		width: 24,
-		height: 24,
-		marginRight: 10,
-		justifyContent: "center",
-		alignItems: "center",
-		borderWidth: 1,
-		borderColor: "gray",
-		borderRadius: 4,
-	},
-	checkboxChecked: {
-		fontSize: 18,
-		color: "green",
-	},
-	checkboxUnchecked: {
-		fontSize: 18,
-		color: "white",
 	},
 });
 
