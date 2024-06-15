@@ -11,6 +11,7 @@ import { tasksLoaded } from "../redux/tasksSlice";
 import DataLoader from "../DataLoader";
 import GUIDGenerator from "GUIDGenerator";
 import Task from "../entities/Task";
+import { AppDispatch } from "redux/store";
 
 interface RootState {
 	tasks: {
@@ -19,7 +20,7 @@ interface RootState {
 }
 
 const MyTasksScreen: React.FC = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const tasks = useSelector((state: RootState) => state.tasks.data);
 	const [page, setPage] = useState(1);
 	const [isLoading, setIsLoading] = useState(false);

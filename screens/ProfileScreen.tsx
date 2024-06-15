@@ -16,6 +16,7 @@ import {
 } from "../redux/userSlice";
 import DataLoader from "../DataLoader";
 import User from "entities/User";
+import { AppDispatch } from "redux/store";
 
 interface RootState {
 	user: {
@@ -29,7 +30,7 @@ const ProfileScreen: React.FC = () => {
 	const userData = useSelector((state: RootState) => state.user.userData);
 	const loading = useSelector((state: RootState) => state.user.loading);
 	const [albums, setAlbums] = useState([]);
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
 		const fetchUserData = async () => {

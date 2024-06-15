@@ -4,6 +4,8 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoaded } from "../redux/userSlice";
 import DataLoader from "../DataLoader";
+import { AppDispatch } from "redux/store";
+import USER from "utils/USER";
 
 interface RootState {
 	user: {
@@ -15,11 +17,11 @@ const LoginScreen: React.FC = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const userData = useSelector((state: RootState) => state.user.userData);
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const navigation = useNavigation<NavigationProp<any>>();
 
 	const handleLogin = async () => {
-		if (username === "admin" && password === "password") {
+		if (username === USER.login && password === USER.password) {
 			if (userData === null) {
 				const loader = DataLoader.getInstance();
 				const tempData = await loader.fetchData(
