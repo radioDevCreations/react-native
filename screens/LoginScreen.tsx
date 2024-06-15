@@ -53,7 +53,7 @@ const LoginScreen: React.FC = () => {
 				onChangeText={setPassword}
 				secureTextEntry
 			/>
-			<Button title="Login" onPress={handleLogin} />
+			<Button title="Log In" onPress={handleLogin} />
 		</View>
 	);
 };
