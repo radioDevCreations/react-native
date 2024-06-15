@@ -5,9 +5,10 @@ import {
 	FlatList,
 	StyleSheet,
 	ActivityIndicator,
+	TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { tasksLoaded } from "../redux/tasksSlice";
+import { tasksLoaded, toggleTaskCompletion } from "../redux/tasksSlice";
 import DataLoader from "../DataLoader";
 import GUIDGenerator from "GUIDGenerator";
 import Task from "../entities/Task";
@@ -53,6 +54,11 @@ const MyTasksScreen: React.FC = () => {
 		setGUID(GUIDGenerator.generateGUID());
 	};
 
+	const handleToggleCompletion = (id: number) => {
+		dispatch(toggleTaskCompletion(id));
+		setGUID(GUIDGenerator.generateGUID());
+	};
+
 	return (
 		<View style={styles.container}>
 			<FlatList
@@ -60,6 +66,16 @@ const MyTasksScreen: React.FC = () => {
 				keyExtractor={(item) => `${item.id.toString()}${guid}`}
 				renderItem={({ item }) => (
 					<View style={styles.todoItem}>
+						<TouchableOpacity
+							onPress={() => handleToggleCompletion(item.id)}
+							style={styles.checkbox}
+						>
+							{item.completed ? (
+								<Text style={styles.checkboxChecked}>✓</Text>
+							) : (
+								<Text style={styles.checkboxUnchecked}></Text>
+							)}
+						</TouchableOpacity>
 						<Text
 							style={
 								item.completed ? styles.todoTextCompleted : styles.todoText
@@ -103,6 +119,24 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		textDecorationLine: "line-through",
 		color: "gray",
+	},
+	checkbox: {
+		width: 24,
+		height: 24,
+		marginRight: 10,
+		justifyContent: "center",
+		alignItems: "center",
+		borderWidth: 1,
+		borderColor: "gray",
+		borderRadius: 4,
+	},
+	checkboxChecked: {
+		fontSize: 18,
+		color: "green",
+	},
+	checkboxUnchecked: {
+		fontSize: 18,
+		color: "white",
 	},
 });
 

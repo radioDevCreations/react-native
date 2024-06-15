@@ -21,9 +21,15 @@ export const tasksSlice = createSlice({
 		tasksLoaded: (state, action: PayloadAction<Task[]>) => {
 			state.data = action.payload;
 		},
+		toggleTaskCompletion(state, action: PayloadAction<number>) {
+			const task = state.data.find((task) => task.id === action.payload);
+			if (task) {
+				task.completed = !task.completed;
+			}
+		},
 	},
 });
 
-export const { tasksLoaded } = tasksSlice.actions;
+export const { tasksLoaded, toggleTaskCompletion } = tasksSlice.actions;
 
 export default tasksSlice.reducer;
